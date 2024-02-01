@@ -2,17 +2,17 @@ import { pool } from '../../../mysql'
 import { v4 as uuidv4 } from 'uuid'
 import { Request, Response } from 'express'
 
-class VideosRepository {
+class VideoRepository {
     
     create(request: Request, response: Response) {
-        const {tittle, description, users_user_id} = request.body
+        const {tittle, description, user_id, thumbnail, publishedAt} = request.body
 
         pool.getConnection((err: any, connection: any) => {
 
         connection.query(
-            'INSERT INTO videos (video_id, users_user_id, tittle, description) VALUES (?,?,?,?)',
-            [uuidv4(), users_user_id, tittle, description],
-            (error: any, result: any, fileds: any) => {
+            'INSERT INTO videos (video_id, user_id, tittle, description, thumbnail, publishedAt) VALUES (?,?,?,?,?,?)',
+            [uuidv4(), user_id, tittle, description, thumbnail, publishedAt],
+            (error: any, result: any, fields: any) => {
             connection.release()
                 if (error) {
                     return response.status(400).json(error)
@@ -25,13 +25,13 @@ class VideosRepository {
     }
     getVideos (request: Request, response: Response) {
         
-        const {users_user_id} = request.query
+        const {user_id} = request.query
         
         pool.getConnection((err: any, connection: any) => {
             connection.query(
-                'SELECT * FROM videos WHERE users_user_id = ?',
-                [users_user_id],
-                (error: any, results: any, fileds: any) => {
+                'SELECT * FROM videos WHERE user_id = ?',
+                [user_id],
+                (error: any, results: any, fields: any) => {
                     connection.release()
                     if (error) {
                         return response.status(400).json({error: "Erro ao buscar os vídeos"})
@@ -48,9 +48,9 @@ class VideosRepository {
         
         pool.getConnection((err: any, connection: any) => {
             connection.query(
-                'SELECT * FROM videos WHERE tittle LIKE ?',
-                [`%${search}%`],
-                (error: any, results: any, fileds: any) => {
+                'SELECT * FROM videos WHERE tittle LIKE ? OR description LIKE ?',
+                [`%${search}%`, `%${search}%`],
+                (error: any, results: any, fields: any) => {
                     connection.release()
                     if (error) {
                         return response.status(400).json({error: "Erro ao buscar os vídeos"})
@@ -62,4 +62,4 @@ class VideosRepository {
     }
 }
 
-export { VideosRepository }
+export { VideoRepository }

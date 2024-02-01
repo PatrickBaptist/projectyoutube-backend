@@ -4,18 +4,18 @@ import { login } from '../middleware/login'
 
 
 const userRoutes = Router()
-const userRepository = new UserRepository()
+const usersRepository = new UserRepository()
 
 userRoutes.post('/sign-up', (request, response) => {
-    userRepository.create(request, response)
+    usersRepository.create(request, response)
 })
 
 userRoutes.post('/sign-in', (request, response) => {
-    userRepository.login(request, response)
+    usersRepository.login(request, response)
 })
 
 userRoutes.get('/get-user', login, (request, response) => {
-    userRepository.getUser(request, response)//puxa as informações
+    usersRepository.getUser(request, response)//puxa as informações
 })
 
 
