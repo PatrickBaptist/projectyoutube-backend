@@ -46,11 +46,11 @@ class UserRepository {
         })
     }
 
-login(request: Request, response: Response) {
-    const {email, password} = request.body
+    login(request: Request, response: Response) {
+        const {email, password} = request.body
 
-pool.getConnection((err: any, connection: any) => {
-    connection.query(
+    pool.getConnection((err: any, connection: any) => {
+        connection.query(
         'SELECT * FROM users WHERE email = ?',
         [email],
         (error: any, results: any, fields: any) => {
@@ -61,7 +61,7 @@ pool.getConnection((err: any, connection: any) => {
 
             if (results.length === 0) {
                 return response.status(400).json({error: "Usuário não encontrado"});
-              }
+            }
 
             compare(password, results[0].password, (err, result) => {
                 if (err) {
@@ -92,7 +92,7 @@ getUser(request: any, response: any) {
     if(decode.email){
         pool.getConnection((error, conn) => {
             conn.query(
-                'SELECT * FROM users WHERE email=?',
+                'SELECT * FROM users WHERE email= ?',
                 [decode.email],
                 (error, resultado, fields) => {
                     conn.release()

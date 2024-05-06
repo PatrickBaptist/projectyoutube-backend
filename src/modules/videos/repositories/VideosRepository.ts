@@ -5,13 +5,13 @@ import { Request, Response } from 'express'
 class VideoRepository {
     
     create(request: Request, response: Response) {
-        const {tittle, description, user_id, thumbnail, publishedAt} = request.body
+        const {title, description, user_id, thumbnail, publishedAt} = request.body
 
         pool.getConnection((err: any, connection: any) => {
 
         connection.query(
-            'INSERT INTO videos (video_id, user_id, tittle, description, thumbnail, publishedAt) VALUES (?,?,?,?,?,?)',
-            [uuidv4(), user_id, tittle, description, thumbnail, publishedAt],
+            'INSERT INTO videos (video_id, user_id, title, description, thumbnail, publishedAt) VALUES (?,?,?,?,?,?)',
+            [uuidv4(), user_id, title, description, thumbnail, publishedAt],
             (error: any, result: any, fields: any) => {
             connection.release()
                 if (error) {
@@ -23,7 +23,8 @@ class VideoRepository {
             }
         )
     }
-    getVideos (request: Request, response: Response) {
+
+    getVideos(request: Request, response: Response) {
         
         const {user_id} = request.query
         
